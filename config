@@ -3,7 +3,7 @@ dmenu_color_text="#999"
 dmenu_color_background="#111"
 dmenu_color_selected_text="red" 
 dmenu_color_selected_background="black" 
-dmenu_font="Monospace-9"
+dmenu_font="Monospace-13"
 
 twitch_language="\"EN\""
 keywords="python\|linux\|cpp"

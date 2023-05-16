@@ -39,7 +39,6 @@ sed 's/ \{1,\}/ /g' | sed 's/♥ //')
 
 if [[ "$choice" == *"category]"* ]]
 then
-	echo "category"
 	category_selection=$(cat categories | dmenu -nb "$dmenu_color_background" -sf "$dmenu_color_selected_text" -sb "$dmenu_color_selected_background" -nf "$dmenu_color_text" -i -l $dmenu_lines -fn $dmenu_font)
 
 	if [[ -z "$category_selection" ]]; then
