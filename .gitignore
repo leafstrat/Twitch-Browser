@@ -1,0 +1,8 @@
+*
+!.gitignore
+!.chosen_category
+!.chosen_sort
+!categories
+!config
+browse
+README.md
