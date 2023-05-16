@@ -6,7 +6,7 @@ dmenu_color_selected_background="black"
 dmenu_font="Monospace-9"
 
 twitch_language="\"EN\""
-keywords="bash\|linux\|webdev"
+keywords="bash\|linux\|webdev\|python\|api\|chatgpt"
 
 mpv_options="--fullscreen --no-terminal"
 open_chat="" # yes OR empty
