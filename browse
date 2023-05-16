@@ -1,0 +1,84 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+
+source config 
+category=$(cat .chosen_category)
+sort=$(cat .chosen_sort)
+declare -A sort_array
+
+sortDisplay_RECENT="Recently Started"
+sortDisplay_VIEWER_COUNT_ASC="Viewers (Low to High)"
+sortDisplay_VIEWER_COUNT="Viewers (High to Low)"
+sort_type=sortDisplay_${sort}
+
+curl_response=$(curl -s 'https://gql.twitch.tv/gql#origin=twilight' -X POST -H 'Accept: */*' -H 'Accept-Language: en-US' -H 'Referer: https://www.twitch.tv/' \
+-H 'Client-Id: kimne78kx3ncx6brgo4mv6wki5h1ko' -H 'Origin: https://www.twitch.tv' -H 'Connection: keep-alive' \
+--data '[{"operationName":"DirectoryPage_Game","variables":{"name":"'"$category"'","options":{"sort":"'$sort'","recommendationsContext":{"platform":"web"},"freeformTags":null,"tags":[],"broadcasterLanguages":['$twitch_language']},"sortTypeIsRecency":true,"limit":100},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"df4bb6cc45055237bfaf3ead608bbafb79815c7100b6ee126719fac3762ddf8b"}}}]' --compressed |\
+sed 's/|/ /g' |\
+jq  -r '.[] | .data | .game | .streams | .edges[] | .node | {viewers: .viewersCount|tostring, name: .broadcaster.displayName, title: [.title[0:70] + " "]|add, Tags: ["#"+.freeformTags[].name + " "] | add} | join("|")' | sed -e 's/\![A-Za-z0-9]*/ /g' | sed 's/ \{1,\}/ /g' | tr -cd '[:alnum:][:space:]|#?@/:._-' | column -t -s'|')
+
+if [ -z "$keywords" ]
+then # if keywords is empty
+echo "[ category] $category
+[  sorting] $(eval echo "\$$sort_type")
+[   config]
+
+$curl_response" > .streams.tmp
+else # if keywords exist
+echo "[ category] $category
+[  sorting] $(eval echo "\$$sort_type")
+[   config]
+" > .streams.tmp
+echo "$curl_response" | grep -i "$keywords" | sed 's/^/♥ /' >> .streams.tmp
+echo "$curl_response" | grep -iv "$keywords" | sed 's/^/  /'>> .streams.tmp
+fi
+
+choice=$(cat .streams.tmp | dmenu -nb "$dmenu_color_background" -sf "$dmenu_color_selected_text" -sb "$dmenu_color_selected_background" -nf "$dmenu_color_text" -i -l $dmenu_lines -fn $dmenu_font |\
+sed 's/ \{1,\}/ /g' | sed 's/♥ //')
+
+
+if [[ "$choice" == *"category]"* ]]
+then
+	echo "category"
+	category_selection=$(cat categories | dmenu -nb "$dmenu_color_background" -sf "$dmenu_color_selected_text" -sb "$dmenu_color_selected_background" -nf "$dmenu_color_text" -i -l $dmenu_lines -fn $dmenu_font)
+
+	if [[ -z "$category_selection" ]]; then
+		#nothing was selected
+		bash browse && exit
+	else
+		echo "$category_selection" > .chosen_category 
+		bash browse && exit
+	fi
+
+fi
+
+if [[ "$choice" == *"config]"* ]]
+then
+	xdg-open config
+	bash browse && exit
+fi
+
+if [[ "$choice" == *"sorting]"* ]]
+then
+sort_array=(["Recently Started"]="RECENT" ["Viewers (Low to High)"]="VIEWER_COUNT_ASC" ["Viewers (High to Low)"]="VIEWER_COUNT" )
+sort_selection=$(printf '%s\n' "${!sort_array[@]}" | tac | dmenu -nb "$dmenu_color_background" -sf "$dmenu_color_selected_text" -sb "$dmenu_color_selected_background" -nf "$dmenu_color_text" -i -l 3 -fn $dmenu_font)
+	if [[ -z "$sort_selection" ]]; then
+		#nothing was selected
+		bash browse && exit
+	else
+		printf '%s\n' "${sort_array[$sort_selection]}" > .chosen_sort
+		bash browse && exit
+	fi
+fi
+
+if [ -z "$choice" ]
+then
+	exit
+fi
+
+mpv $mpv_options https://www.twitch.tv/$(echo $choice | cut -d ' ' -f2) &
+
+if [[ "$open_chat" == *"yes"* ]]
+then
+	$browser_choice $browser_options "https://www.twitch.tv/popout/$(echo $choice | cut -d ' ' -f2)/chat?popout="
+fi 
