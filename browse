@@ -75,7 +75,7 @@ then
 	exit
 fi
 
-mpv $mpv_options https://www.twitch.tv/$(echo $choice | cut -d ' ' -f2) &
+mpv $mpv_options https://www.twitch.tv/$(echo $choice | cut -d ' ' -f2) > /dev/null 2>&1 &
 
 if [[ "$open_chat" == *"yes"* ]]
 then
