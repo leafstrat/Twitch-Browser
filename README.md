@@ -53,3 +53,6 @@ Using dmenu:
 `browser_choice="chromium-browser"` 
 
 `browser_options="--new-window"` optional configurations to send with the browser instance that opens the chat URL
+
+[browse_demo.webm](https://github.com/leafstrat/Twitch-Browser/assets/4014775/aa32571b-3724-40a2-8404-b861fe2f61e8)
+
