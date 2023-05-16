@@ -10,6 +10,8 @@ Which uses `yt-dlp` to get the proper streaming URL.
 
 I built this so I could browse the [Software and Game Development](https://www.twitch.tv/directory/game/Software%20and%20Game%20Development) streams without visiting Twitch, as such this is the default category when you first use the script. But I have included all the popular categories [in a file](https://github.com/leafstrat/Twitch-Browser/blob/main/categories) and an easy way to switch between them for user convenience.
 
+[browse_demo.webm](https://github.com/leafstrat/Twitch-Browser/assets/4014775/aa32571b-3724-40a2-8404-b861fe2f61e8)
+
 #### Installing yt-dlp:
 [Installation · yt-dlp/yt-dlp Wiki · GitHub](https://github.com/yt-dlp/yt-dlp/wiki/Installation)
 
@@ -53,6 +55,4 @@ Using dmenu:
 `browser_choice="chromium-browser"` 
 
 `browser_options="--new-window"` optional configurations to send with the browser instance that opens the chat URL
-
-[browse_demo.webm](https://github.com/leafstrat/Twitch-Browser/assets/4014775/aa32571b-3724-40a2-8404-b861fe2f61e8)
 

@@ -6,9 +6,9 @@ dmenu_color_selected_background="black"
 dmenu_font="Monospace-9"
 
 twitch_language="\"EN\""
-keywords="python\|linux\|cpp"
+keywords="bash\|linux\|webdev"
 
-mpv_options=""
+mpv_options="--fullscreen --no-terminal"
 open_chat="" # yes OR empty
 browser_choice="chromium-browser"
 browser_options="--new-window"
